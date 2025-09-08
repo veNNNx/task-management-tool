@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task-management-tool
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./api:/app/api
+      - ./prod_db.sqlite:/app/prod_db.sqlite
+    environment:
+      DATABASE_URL: sqlite:///./prod_db.sqlite

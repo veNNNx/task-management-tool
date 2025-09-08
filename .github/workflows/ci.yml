@@ -1,0 +1,36 @@
+name: CI
+
+on: [pull_request, push]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: "1.8.2"
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
+      - name: Run pre-commit
+        run: |
+          poetry run pre-commit install
+          poetry run pre-commit run --all-files
+
+      - name: Run tests with coverage
+        run: |
+          poetry run pytest --cov=backend --cov=api --cov-report=xml --cov-report=term
