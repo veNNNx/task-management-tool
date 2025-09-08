@@ -7,6 +7,7 @@ from backend.common.infrastructure.base import Base
 from backend.common.infrastructure.db import database, engine
 from backend.ioc_container import ApplicationContainer
 
+from .common.exception_handlers import add_common_exception_handlers
 from .project.exception_handlers import add_project_exception_handlers
 from .project.router import router as router_projects
 from .task.exception_handlers import add_task_exception_handlers
@@ -32,7 +33,7 @@ def create_app(container: ApplicationContainer) -> FastAPI:
 
     app.include_router(router_tasks)
     app.include_router(router_projects)
-
+    add_common_exception_handlers(app)
     add_task_exception_handlers(app)
     add_project_exception_handlers(app)
 

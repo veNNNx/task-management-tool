@@ -9,6 +9,6 @@ EXCEPTION_STATUS_CODES = {
 }
 
 
-def add_task_exception_handlers(app: FastAPI) -> None:
+def add_common_exception_handlers(app: FastAPI) -> None:
     for exc_class, status_code in EXCEPTION_STATUS_CODES.items():
         register_exception_handler(app, exc_class, status_code)
