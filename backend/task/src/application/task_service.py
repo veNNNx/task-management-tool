@@ -69,7 +69,7 @@ class TaskService:
         if task.deadline != deadline:
             self._task_validation_service.validate_deadline(deadline)
 
-        self.logger.debug("Updating task with title: %s", title)
+        self.logger.debug("Updating task with id %s and title: %s", id, title)
         return self._task_tabel.update(
             task_id=id,
             title=title,
@@ -81,11 +81,14 @@ class TaskService:
         task = self._task_tabel.get_by_id(id)
         self._task_validation_service.validate_task_state(task, completed)
         self.logger.debug(
-            "Changing task with title: %s state to %s.", task.title, completed
+            "Changing task with id %s and title: %s state to %s.",
+            id,
+            task.title,
+            completed,
         )
         return self._task_tabel.change_completed_state(task_id=id, completed=completed)
 
     def delete_by_id(self, id: UUID) -> None:
         task = self._task_tabel.get_by_id(id)
-        self.logger.debug("Delete the task with title: %s", task.title)
+        self.logger.debug("Delete the task with id %s and title: %s", id, task.title)
         self._task_tabel.delete_by_id(id)

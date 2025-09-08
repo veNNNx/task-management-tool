@@ -73,7 +73,8 @@ class TaskTable:
 
             if task_deadline_utc and task_deadline_utc > project_deadline_utc:
                 self.logger.debug(
-                    "Changing task %s deadline from %s to assigned project deadline: %s",
+                    "Changing task with id %s and title %s deadline from %s to assigned project deadline: %s",
+                    task_model.id,
                     task_model.title,
                     task_deadline_utc,
                     project_deadline_utc,

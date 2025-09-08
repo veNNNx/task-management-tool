@@ -4,10 +4,7 @@ from uuid import uuid4
 import pytest
 from assertpy import assert_that
 
-from backend.task import (
-    TaskAlreadyCompletedException,
-    TaskNotFoundException,
-)
+from backend.task import TaskAlreadyCompletedException, TaskNotFoundException
 
 from ..src.application.project_servcie import ProjectService
 from ..src.domain.exceptions import (

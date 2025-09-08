@@ -47,9 +47,11 @@ class ProjectService:
         self._project_validation_service.validate_task_completed(task)
 
         self.logger.debug(
-            "Linking task with id: %s to project with id: %s",
+            "Linking task with id: %s and title: %s to project with id: %s and title: %s",
             task_id,
+            task.title,
             project_id,
+            project.title,
         )
         self._task_service.link_task_to_project(
             project_id=project_id, project_deadline=project.deadline, task_id=task_id
@@ -64,9 +66,11 @@ class ProjectService:
         )
         self._project_validation_service.validate_task_completed(task)
         self.logger.debug(
-            "Unlinking task with id: %s from project with id: %s",
+            "Unlinking task with id: %s and title: %s from project with id: %s and title: %s",
             task_id,
+            task.title,
             project_id,
+            project.title,
         )
 
         self._task_service.unlink_task_from_project(task_id=task_id)
@@ -93,7 +97,7 @@ class ProjectService:
         if project.deadline != deadline:
             self._project_validation_service.validate_deadline(deadline)
 
-        self.logger.debug("Updating project with title: %s", title)
+        self.logger.debug("Updating project with id: %s and title: %s", id, title)
         return self._project_tabel.update(
             id=id,
             title=title,
@@ -103,5 +107,7 @@ class ProjectService:
 
     def delete_by_id(self, id: UUID) -> None:
         project = self._project_tabel.get_by_id(id)
-        self.logger.debug("Delete the project with title: %s", project.title)
+        self.logger.debug(
+            "Delete the project with id: %s and title: %s", id, project.title
+        )
         self._project_tabel.delete_by_id(id)
