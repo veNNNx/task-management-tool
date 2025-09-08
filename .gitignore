@@ -9,7 +9,7 @@ __pycache__/
 
 *.log
 central.log*
-central.log.* 
+central.log.*
 
 
 .venv/

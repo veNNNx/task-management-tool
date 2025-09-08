@@ -1,5 +1,3 @@
-from threading import Thread
-
 import pytest
 
 from backend.ioc_container import ApplicationContainer
