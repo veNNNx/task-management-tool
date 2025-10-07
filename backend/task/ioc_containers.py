@@ -11,18 +11,18 @@ from .src.infrastructure.task_repository import TaskTable
 
 class TasksContainer(containers.DeclarativeContainer):
     session_factory = providers.Dependency(instance_of=sessionmaker)
-    task_tabel = providers.Factory(TaskTable, session=session_factory)
+    task_table = providers.Factory(TaskTable, session=session_factory)
     task_validation_service = providers.Factory(TaskValidationService)
     event_bus = providers.Dependency(instance_of=EventBus)
 
     task_service = providers.Factory(
         TaskService,
-        task_tabel=task_tabel,
+        task_table=task_table,
         task_validation_service=task_validation_service,
     )
 
     task_deadline_checker_service = providers.Factory(
         TaskDeadlineCheckerService,
-        task_tabel=task_tabel,
+        task_table=task_table,
         event_bus=event_bus,
     )

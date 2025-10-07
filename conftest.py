@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import text
 
 from api.api.app_factory import create_app
+from api.api.auth import router as auth_router
 from backend.common import Tables
 from backend.common.infrastructure.base import Base
 from backend.common.infrastructure.db_test import TestingSessionLocal, test_engine
@@ -22,7 +23,7 @@ def setup_test_database():
 def test_app_container():
     container = ApplicationContainer()
     container.init_resources()
-    container.wire(packages=["api", "backend"])
+    container.wire(packages=["api", "backend", auth_router])
 
     container.session_factory.override(providers.Singleton(lambda: TestingSessionLocal))
 

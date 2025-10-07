@@ -13,12 +13,12 @@ class ProjectsContainer(containers.DeclarativeContainer):
 
     task_service = providers.Dependency(instance_of=TaskService)
 
-    project_tabel = providers.Factory(ProjectTable, session=session_factory)
+    project_table = providers.Factory(ProjectTable, session=session_factory)
     project_validation_service = providers.Factory(ProjectValidationService)
 
     project_service = providers.Factory(
         ProjectService,
-        project_tabel=project_tabel,
+        project_table=project_table,
         project_validation_service=project_validation_service,
         task_service=task_service,
     )

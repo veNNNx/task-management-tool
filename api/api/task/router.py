@@ -7,9 +7,14 @@ from fastapi import APIRouter, Depends, status
 from backend.ioc_container import ApplicationContainer
 from backend.task import Task, TaskService
 
+from ..auth.router import verify_user
 from .schema import TaskIn, TaskOut, TaskUpdate
 
-router = APIRouter(prefix="/tasks", tags=["Tasks"])
+router = APIRouter(
+    prefix="/tasks",
+    tags=["Tasks"],
+    dependencies=[Depends(verify_user)],
+)
 
 
 # POST

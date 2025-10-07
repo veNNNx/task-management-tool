@@ -8,10 +8,15 @@ from backend.ioc_container import ApplicationContainer
 from backend.project import Project, ProjectService
 from backend.task import Task
 
+from ..auth.router import verify_user
 from ..task.schema import TaskOut
 from .schema import ProjectIn, ProjectOut
 
-router = APIRouter(prefix="/projects", tags=["Projects"])
+router = APIRouter(
+    prefix="/projects",
+    tags=["Projects"],
+    dependencies=[Depends(verify_user)],
+)
 
 
 # POST

@@ -10,12 +10,12 @@ from ..infrastructure.task_repository import TaskTable
 
 @define
 class TaskDeadlineCheckerService:
-    _task_tabel: TaskTable
+    _task_table: TaskTable
     _event_bus: EventBus
 
     def check_deadlines(self):
         now = datetime.now(timezone.utc)
-        upcoming_tasks = self._task_tabel.get_tasks_with_deadline_between(
+        upcoming_tasks = self._task_table.get_tasks_with_deadline_between(
             now, now + timedelta(hours=24)
         )
         for task in upcoming_tasks:

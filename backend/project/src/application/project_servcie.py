@@ -14,7 +14,7 @@ from .project_validation_service import ProjectValidationService
 @define
 class ProjectService:
     logger: logging.Logger = field(init=False)
-    _project_tabel: ProjectTable
+    _project_table: ProjectTable
     _project_validation_service: ProjectValidationService
     _task_service: TaskService
 
@@ -38,7 +38,7 @@ class ProjectService:
         )
         self.logger.debug("Adding new project with title: %s", title)
 
-        return self._project_tabel.create_and_save(project)
+        return self._project_table.create_and_save(project)
 
     def link_task_to_project(self, project_id: UUID, task_id: UUID) -> None:
         task = self._task_service.get_by_id(task_id)
@@ -56,7 +56,7 @@ class ProjectService:
         self._task_service.link_task_to_project(
             project_id=project_id, project_deadline=project.deadline, task_id=task_id
         )
-        project = self._project_tabel.update_at(project_id)
+        project = self._project_table.update_at(project_id)
 
     def unlink_task_from_project(self, project_id: UUID, task_id: UUID) -> None:
         project = self.get_by_id(project_id)
@@ -74,16 +74,16 @@ class ProjectService:
         )
 
         self._task_service.unlink_task_from_project(task_id=task_id)
-        self._project_tabel.update_at(project_id)
+        self._project_table.update_at(project_id)
 
     def get_all(self) -> list[Project]:
-        return self._project_tabel.get_all()
+        return self._project_table.get_all()
 
     def get_by_id(self, id: UUID) -> Project:
-        return self._project_tabel.get_by_id(id)
+        return self._project_table.get_by_id(id)
 
     def get_all_tasks_by_project_id(self, id: UUID) -> list[Task]:
-        self._project_tabel.get_by_id(id)
+        self._project_table.get_by_id(id)
         return self._task_service.get_all_tasks_by_project_id(id=id)
 
     def update_by_id(
@@ -93,12 +93,12 @@ class ProjectService:
         deadline: datetime,
         description: str | None = None,
     ) -> Project:
-        project = self._project_tabel.get_by_id(id)
+        project = self._project_table.get_by_id(id)
         if project.deadline != deadline:
             self._project_validation_service.validate_deadline(deadline)
 
         self.logger.debug("Updating project with id: %s and title: %s", id, title)
-        return self._project_tabel.update(
+        return self._project_table.update(
             id=id,
             title=title,
             deadline=deadline,
@@ -106,8 +106,8 @@ class ProjectService:
         )
 
     def delete_by_id(self, id: UUID) -> None:
-        project = self._project_tabel.get_by_id(id)
+        project = self._project_table.get_by_id(id)
         self.logger.debug(
             "Delete the project with id: %s and title: %s", id, project.title
         )
-        self._project_tabel.delete_by_id(id)
+        self._project_table.delete_by_id(id)

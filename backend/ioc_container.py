@@ -10,8 +10,10 @@ from backend.task import (
     start_task_deadline_scheduler,
 )
 
+from .auth.ioc_containers import AuthContainer
 from .project.ioc_containers import ProjectsContainer
 from .task.ioc_containers import TasksContainer
+from .user.ioc_containers import UsersContainer
 
 
 class ApplicationContainer(containers.DeclarativeContainer):
@@ -23,6 +25,14 @@ class ApplicationContainer(containers.DeclarativeContainer):
     event_bus = providers.Singleton(EventBus)
 
     # containers
+    users = providers.Container(
+        UsersContainer,
+        session_factory=session_factory,
+    )
+    auth = providers.Container(
+        AuthContainer,
+        user_service=users.user_service,
+    )
     tasks = providers.Container(
         TasksContainer,
         session_factory=session_factory,

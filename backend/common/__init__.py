@@ -4,5 +4,5 @@ from .domain.exceptions import InvalidDeadlineException as InvalidDeadlineExcept
 from .domain.validation_service import (
     CommonValidationService as CommonValidationService,
 )
-from .infrastructure.db_tabels import Tables as Tables
+from .infrastructure.db_tables import Tables as Tables
 from .logger_config import LOGGING_CONFIG as LOGGING_CONFIG

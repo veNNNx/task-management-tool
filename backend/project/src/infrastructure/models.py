@@ -5,7 +5,7 @@ from sqlalchemy import Boolean, Column, DateTime, String
 from sqlalchemy.orm import relationship
 
 from backend.common.infrastructure.base import Base
-from backend.common.infrastructure.db_tabels import Tables
+from backend.common.infrastructure.db_tables import Tables
 
 
 class ProjectModel(Base):
