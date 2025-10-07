@@ -13,6 +13,7 @@ The project structure, base configuration, and test setup were derived from my o
 - Running via **Docker Compose**
 - Testing via pytest
 - CI via GitHub Actions
+- JWT-based authentication
 
 ---
 
