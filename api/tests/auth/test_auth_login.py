@@ -16,4 +16,3 @@ class TestAuthLogin:
         response = steps.login_user()
 
         assert_that(response.status_code).is_equal_to(status.HTTP_404_NOT_FOUND)
-        assert_that(response.json()["token_type"]).is_equal_to("bearer")
