@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi_pagination import Page, Params, paginate
 
 from backend.ioc_container import ApplicationContainer
-from backend.task import Task, TaskService
+from backend.task import Task, TaskFacade
 
 from ..auth.router import verify_user
 from .schema import TaskIn, TaskOut, TaskUpdate
@@ -33,12 +33,12 @@ router = APIRouter(
 @inject
 def create(
     payload: TaskIn,
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
 ) -> Task:
-    return task_service.create(
+    return task_facade.create(
         title=payload.title,
         deadline=payload.deadline,
         description=payload.description,
@@ -55,13 +55,13 @@ def create(
 )
 @inject
 def get_all(
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
     params: Params = Depends(),
 ) -> Page[Task]:
-    tasks = task_service.get_all()
+    tasks = task_facade.get_all()
     return paginate(tasks, params)
 
 
@@ -77,12 +77,12 @@ def get_all(
 @inject
 def get_by_id(
     id: UUID,
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
 ) -> Task:
-    return task_service.get_by_id(id)
+    return task_facade.get_by_id(id)
 
 
 # PUT
@@ -99,12 +99,12 @@ def get_by_id(
 def update_by_id(
     id: UUID,
     payload: TaskUpdate,
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
 ) -> Task:
-    return task_service.update_by_id(
+    return task_facade.update_by_id(
         id=id,
         title=payload.title,
         deadline=payload.deadline,
@@ -128,12 +128,12 @@ def update_by_id(
 @inject
 def mark_as_completed(
     id: UUID,
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
 ) -> Task:
-    return task_service.change_task_state(id=id, completed=True)
+    return task_facade.change_task_state(id=id, completed=True)
 
 
 @router.patch(
@@ -151,12 +151,12 @@ def mark_as_completed(
 @inject
 def mark_as_uncompleted(
     id: UUID,
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
 ) -> Task:
-    return task_service.change_task_state(id=id, completed=False)
+    return task_facade.change_task_state(id=id, completed=False)
 
 
 # DELETE
@@ -171,9 +171,9 @@ def mark_as_uncompleted(
 @inject
 def delete_by_id(
     id: UUID,
-    task_service: Annotated[
-        TaskService,
-        Depends(Provide[ApplicationContainer.tasks.container.task_service]),
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
     ],
 ) -> None:
-    task_service.delete_by_id(id)
+    task_facade.delete_by_id(id)

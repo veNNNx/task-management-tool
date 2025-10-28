@@ -4,7 +4,7 @@ from uuid import UUID
 
 from attrs import define, field
 
-from backend.task import Task, TaskService
+from backend.task import Task, TaskFacade
 
 from ..domain.project import Project
 from ..infrastructure.project_repository import ProjectTable
@@ -16,7 +16,7 @@ class ProjectService:
     logger: logging.Logger = field(init=False)
     _project_table: ProjectTable
     _project_validation_service: ProjectValidationService
-    _task_service: TaskService
+    _task_facade: TaskFacade
 
     def __attrs_post_init__(self) -> None:
         self.logger = logging.getLogger(
@@ -41,7 +41,7 @@ class ProjectService:
         return self._project_table.create_and_save(project)
 
     def link_task_to_project(self, project_id: UUID, task_id: UUID) -> None:
-        task = self._task_service.get_by_id(task_id)
+        task = self._task_facade.get_by_id(task_id)
         project = self.get_by_id(project_id)
         project.validate_project_completed()
         self._project_validation_service.validate_task_completed(task)
@@ -53,14 +53,14 @@ class ProjectService:
             project_id,
             project.title,
         )
-        self._task_service.link_task_to_project(
+        self._task_facade.link_task_to_project(
             project_id=project_id, project_deadline=project.deadline, task_id=task_id
         )
         project = self._project_table.update_at(project_id)
 
     def unlink_task_from_project(self, project_id: UUID, task_id: UUID) -> None:
         project = self.get_by_id(project_id)
-        task = self._task_service.get_by_id(task_id)
+        task = self._task_facade.get_by_id(task_id)
         self._project_validation_service.validate_task_linked_to_project(
             task_project_id=task.project_id, project=project
         )
@@ -73,7 +73,7 @@ class ProjectService:
             project.title,
         )
 
-        self._task_service.unlink_task_from_project(task_id=task_id)
+        self._task_facade.unlink_task_from_project(task_id=task_id)
         self._project_table.update_at(project_id)
 
     def get_all(self) -> list[Project]:
@@ -84,7 +84,7 @@ class ProjectService:
 
     def get_all_tasks_by_project_id(self, id: UUID) -> list[Task]:
         self._project_table.get_by_id(id)
-        return self._task_service.get_all_tasks_by_project_id(id=id)
+        return self._task_facade.get_all_tasks_by_project_id(id=id)
 
     def update_by_id(
         self,

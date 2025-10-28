@@ -3,13 +3,13 @@ from uuid import UUID
 
 from attrs import define
 
-from ..src.application.task_service import TaskService
+from ..src.application.task_facade import TaskFacade
 from ..src.domain.task import Task
 
 
 @define
 class Steps:
-    _task_service: TaskService
+    _task_facade: TaskFacade
 
     def create_task(
         self,
@@ -19,9 +19,9 @@ class Steps:
     ) -> Task:
         if not deadline:
             deadline = datetime.now(timezone.utc) + timedelta(days=1)
-        return self._task_service.create(
+        return self._task_facade.create(
             title=title, deadline=deadline, project_id=project_id
         )
 
     def get_by_id(self, id: UUID) -> Task:
-        return self._task_service.get_by_id(id)
+        return self._task_facade.get_by_id(id)

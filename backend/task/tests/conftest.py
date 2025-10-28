@@ -2,19 +2,19 @@ import pytest
 
 from backend.ioc_container import ApplicationContainer
 
-from ..src.application.task_service import TaskService
+from ..src.application.task_facade import TaskFacade
 from ..src.infrastructure.scheduler import start_task_deadline_scheduler
 from .steps import Steps
 
 
 @pytest.fixture
-def task_service(test_app_container: ApplicationContainer) -> TaskService:
-    return test_app_container.tasks().task_service()
+def task_facade(test_app_container: ApplicationContainer) -> TaskFacade:
+    return test_app_container.tasks().task_facade()
 
 
 @pytest.fixture
 def steps(test_app_container: ApplicationContainer) -> Steps:
-    return Steps(task_service=test_app_container.tasks().task_service())
+    return Steps(task_facade=test_app_container.tasks().task_facade())
 
 
 @pytest.fixture

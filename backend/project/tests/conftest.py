@@ -14,6 +14,6 @@ def project_service(test_app_container: ApplicationContainer) -> ProjectService:
 @pytest.fixture
 def steps(test_app_container: ApplicationContainer) -> Steps:
     return Steps(
-        task_service=test_app_container.tasks().task_service(),
+        task_facade=test_app_container.tasks().task_facade(),
         project_service=test_app_container.projects().project_service(),
     )

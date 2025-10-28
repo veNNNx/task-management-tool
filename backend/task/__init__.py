@@ -1,3 +1,4 @@
+from .src.application.task_facade import TaskFacade as TaskFacade
 from .src.application.task_service import TaskService as TaskService
 from .src.domain.events import (
     TaskDeadlineApproachingEvent as TaskDeadlineApproachingEvent,

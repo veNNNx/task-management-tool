@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from backend.common import EventBus
 
 from .src.application.task_deadline_checker_service import TaskDeadlineCheckerService
+from .src.application.task_facade import TaskFacade
 from .src.application.task_service import TaskService
 from .src.application.task_validation_service import TaskValidationService
 from .src.infrastructure.task_repository import TaskTable
@@ -19,6 +20,10 @@ class TasksContainer(containers.DeclarativeContainer):
         TaskService,
         task_table=task_table,
         task_validation_service=task_validation_service,
+    )
+    task_facade = providers.Factory(
+        TaskFacade,
+        task_service=task_service,
     )
 
     task_deadline_checker_service = providers.Factory(

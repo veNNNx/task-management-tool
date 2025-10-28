@@ -41,7 +41,7 @@ class ApplicationContainer(containers.DeclarativeContainer):
     projects = providers.Container(
         ProjectsContainer,
         session_factory=session_factory,
-        task_service=tasks.task_service,
+        task_facade=tasks.task_facade,
     )
 
     # events
