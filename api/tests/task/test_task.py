@@ -9,10 +9,16 @@ from .steps import Steps
 
 class TestTask:
     def test_get_all_tasks(self, steps: Steps) -> None:
+        task = steps.create_task().json()
         response = steps.get_all()
         assert_that(response.status_code).is_equal_to(status.HTTP_200_OK)
 
-        assert_that(response.json()).is_empty()
+        data = response.json()
+        assert_that(data["items"]).contains(task)
+        assert_that(data["page"]).is_equal_to(1)
+        assert_that(data["pages"]).is_equal_to(1)
+        assert_that(data["size"]).is_equal_to(50)
+        assert_that(data["total"]).is_equal_to(1)
 
     def test_get_task_by_id(self, steps: Steps) -> None:
         response_create = steps.create_task()

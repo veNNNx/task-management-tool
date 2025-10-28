@@ -26,7 +26,7 @@ class Steps:
         )
 
     def get_all(self) -> Response:
-        return self._client.get("/tasks")
+        return self._client.get("/tasks?page=1&size=50")
 
     def get_by_id(self, id: UUID) -> Response:
         return self._client.get(f"/tasks/{id}")

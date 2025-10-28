@@ -3,6 +3,7 @@ from uuid import UUID
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, status
+from fastapi_pagination import Page, Params, paginate
 
 from backend.ioc_container import ApplicationContainer
 from backend.task import Task, TaskService
@@ -48,7 +49,7 @@ def create(
 # GET
 @router.get(
     "/",
-    response_model=list[TaskOut],
+    response_model=Page[TaskOut],
     status_code=status.HTTP_200_OK,
     summary="Retrieve a list of all tasks.",
 )
@@ -58,8 +59,10 @@ def get_all(
         TaskService,
         Depends(Provide[ApplicationContainer.tasks.container.task_service]),
     ],
-) -> list[Task]:
-    return task_service.get_all()
+    params: Params = Depends(),
+) -> Page[Task]:
+    tasks = task_service.get_all()
+    return paginate(tasks, params)
 
 
 @router.get(

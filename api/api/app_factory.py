@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from fastapi import FastAPI
+from fastapi_pagination import add_pagination
 
 from backend.common.infrastructure.base import Base
 from backend.common.infrastructure.db import database, engine
@@ -31,6 +32,9 @@ def create_app(container: ApplicationContainer) -> FastAPI:
         title="WebAPI",
         lifespan=lifespan,
     )
+
+    add_pagination(app)
+
     app.state.container = container
 
     Base.metadata.create_all(engine)
