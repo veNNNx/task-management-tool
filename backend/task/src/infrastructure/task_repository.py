@@ -144,6 +144,13 @@ class TaskTable:
             db.commit()
             db.refresh(task_model)
 
+    def get_tasks_by_user_id(self, user_id: UUID) -> list[Task]:
+        with self._session() as db:
+            task_models = (
+                db.query(TaskModel).filter(TaskModel.assigned_to == str(user_id)).all()
+            )
+        return [self._to_entity(task_model) for task_model in task_models]
+
     def get_all(self) -> list[Task]:
         with self._session() as db:
             task_models = db.query(TaskModel).all()

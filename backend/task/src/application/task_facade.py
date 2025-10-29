@@ -45,6 +45,10 @@ class TaskFacade:
     def unlink_task_from_project(self, task_id: UUID) -> None:
         self._task_service.unlink_task_from_project(task_id=task_id)
 
+    def get_tasks_by_user_id(self, user_id: UUID) -> list[Task]:
+        self._user_service.get_by_id(id=user_id)
+        return self._task_service.get_tasks_by_user_id(user_id=user_id)
+
     def assign_task_to_user(self, task_id: UUID, user_id: UUID) -> None:
         self._user_service.get_by_id(id=user_id)
         self._task_service.assign_task_to_user(task_id=task_id, user_id=user_id)

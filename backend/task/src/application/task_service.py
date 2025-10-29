@@ -55,6 +55,9 @@ class TaskService:
     def unassign_task(self, task_id: UUID) -> None:
         self._task_table.unassign_task(task_id=task_id)
 
+    def get_tasks_by_user_id(self, user_id: UUID) -> list[Task]:
+        return self._task_table.get_tasks_by_user_id(user_id=user_id)
+
     def get_all_tasks_by_project_id(self, id: UUID) -> list[Task]:
         return self._task_table.get_all_tasks_by_project_id(id=id)
 

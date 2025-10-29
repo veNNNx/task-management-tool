@@ -85,6 +85,26 @@ def get_by_id(
     return task_facade.get_by_id(id)
 
 
+@router.get(
+    "/by-user/{user_id}",
+    response_model=list[TaskOut],
+    status_code=status.HTTP_200_OK,
+    summary="Retrieve tasks by user ID.",
+    responses={
+        status.HTTP_404_NOT_FOUND: {"description": "Requested user does not exist."},
+    },
+)
+@inject
+def get_tasks_by_user_id(
+    user_id: UUID,
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
+    ],
+) -> list[Task]:
+    return task_facade.get_tasks_by_user_id(user_id)
+
+
 # PUT
 @router.put(
     "/{id}",
