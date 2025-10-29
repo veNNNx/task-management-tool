@@ -37,6 +37,7 @@ class ApplicationContainer(containers.DeclarativeContainer):
         TasksContainer,
         session_factory=session_factory,
         event_bus=event_bus,
+        user_service=users.user_service,
     )
     projects = providers.Container(
         ProjectsContainer,

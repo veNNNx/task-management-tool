@@ -5,7 +5,7 @@ from attrs import define, field
 from sqlalchemy.orm import sessionmaker
 
 from ..domain.user import User
-from .exceptions import UserNotFoundException
+from .exceptions import UserByEmailNotFoundException, UserByIdNotFoundException
 from .models import UserModel
 
 
@@ -39,7 +39,16 @@ class UserTable:
                 db.query(UserModel).filter(UserModel.email == user_email).first()
             )
         if not user_model:
-            raise UserNotFoundException(user_email)
+            raise UserByEmailNotFoundException(user_email)
+        return self._to_entity(user_model)
+
+    def get_by_id(self, user_id: UUID) -> User:
+        with self._session() as db:
+            user_model = (
+                db.query(UserModel).filter(UserModel.id == str(user_id)).first()
+            )
+        if not user_model:
+            raise UserByIdNotFoundException(user_id)
         return self._to_entity(user_model)
 
     def check_if_exist_by_email(self, user_email: str) -> bool:
@@ -55,7 +64,7 @@ class UserTable:
                 db.query(UserModel).filter(UserModel.email == user_email).first()
             )
             if not user_model:
-                raise UserNotFoundException(user_email)
+                raise UserByEmailNotFoundException(user_email)
             db.delete(user_model)
             db.commit()
 

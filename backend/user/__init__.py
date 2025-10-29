@@ -4,7 +4,10 @@ from .src.domain.exceptions import (
 )
 from .src.domain.user import User as User
 from .src.infrastructure.exceptions import (
-    UserNotFoundException as UserNotFoundException,
+    UserByEmailNotFoundException as UserByEmailNotFoundException,
+)
+from .src.infrastructure.exceptions import (
+    UserByIdNotFoundException as UserByIdNotFoundException,
 )
 from .src.infrastructure.exceptions import (
     UserWithEmailAlreadyExistsException as UserWithEmailAlreadyExistsException,

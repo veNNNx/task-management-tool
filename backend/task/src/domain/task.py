@@ -14,5 +14,6 @@ class Task(Entity):
     description: str | None = None
     completed: bool = False
     project_id: None | UUID = None
+    assigned_to: None | UUID = None
     created_at: datetime = datetime.now(timezone.utc)
     updated_at: datetime = datetime.now(timezone.utc)

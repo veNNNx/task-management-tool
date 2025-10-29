@@ -2,6 +2,7 @@ from dependency_injector import containers, providers
 from sqlalchemy.orm import sessionmaker
 
 from backend.common import EventBus
+from backend.user import UserService
 
 from .src.application.task_deadline_checker_service import TaskDeadlineCheckerService
 from .src.application.task_facade import TaskFacade
@@ -15,6 +16,7 @@ class TasksContainer(containers.DeclarativeContainer):
     task_table = providers.Factory(TaskTable, session=session_factory)
     task_validation_service = providers.Factory(TaskValidationService)
     event_bus = providers.Dependency(instance_of=EventBus)
+    user_service = providers.Dependency(instance_of=UserService)
 
     task_service = providers.Factory(
         TaskService,
@@ -22,8 +24,7 @@ class TasksContainer(containers.DeclarativeContainer):
         task_validation_service=task_validation_service,
     )
     task_facade = providers.Factory(
-        TaskFacade,
-        task_service=task_service,
+        TaskFacade, task_service=task_service, user_service=user_service
     )
 
     task_deadline_checker_service = providers.Factory(

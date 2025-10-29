@@ -23,6 +23,7 @@ class TaskModel(Base):
     deadline = Column(DateTime(timezone=True), nullable=False)
     completed = Column(Boolean, default=False, nullable=False)
     project_id = Column(String(36), ForeignKey(f"{Tables.PROJECTS}.id"), nullable=True)
+    assigned_to = Column(String(36), ForeignKey(f"{Tables.USERS}.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False)
     updated_at = Column(
         DateTime(timezone=True),

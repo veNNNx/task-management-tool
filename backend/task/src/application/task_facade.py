@@ -4,6 +4,8 @@ from uuid import UUID
 
 from attrs import define, field
 
+from backend.user import UserService
+
 from ..domain.task import Task
 from .task_service import TaskService
 
@@ -11,6 +13,7 @@ from .task_service import TaskService
 @define
 class TaskFacade:
     _task_service: TaskService
+    _user_service: UserService
     logger: logging.Logger = field(init=False)
 
     def __attrs_post_init__(self) -> None:
@@ -42,11 +45,12 @@ class TaskFacade:
     def unlink_task_from_project(self, task_id: UUID) -> None:
         self._task_service.unlink_task_from_project(task_id=task_id)
 
-    # def assign_task_to_user(self, task_id: UUID, user_id: UUID) -> None:
-    #     self._task_service.assign_task_to_user(task_id=task_id, user_id=user_id)
+    def assign_task_to_user(self, task_id: UUID, user_id: UUID) -> None:
+        self._user_service.get_by_id(id=user_id)
+        self._task_service.assign_task_to_user(task_id=task_id, user_id=user_id)
 
-    # def unassign_task(self, task_id: UUID) -> None:
-    #     self._task_service.unassign_task(task_id=task_id)
+    def unassign_task(self, task_id: UUID) -> None:
+        self._task_service.unassign_task(task_id=task_id)
 
     def get_all_tasks_by_project_id(self, id: UUID) -> list[Task]:
         return self._task_service.get_all_tasks_by_project_id(id=id)

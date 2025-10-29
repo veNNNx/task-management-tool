@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 
 from attrs import define, field
 
@@ -39,6 +40,9 @@ class UserService:
 
     def get_by_email(self, email: str) -> User:
         return self._user_table.get_by_email(email)
+
+    def get_by_id(self, id: UUID) -> User:
+        return self._user_table.get_by_id(id)
 
     def delete_by_id(self, email: str) -> None:
         user = self._user_table.get_by_email(email)

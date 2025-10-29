@@ -1,12 +1,17 @@
 from fastapi import FastAPI, status
 
-from backend.user import UserNotFoundException, UserWithEmailAlreadyExistsException
+from backend.user import (
+    UserByEmailNotFoundException,
+    UserByIdNotFoundException,
+    UserWithEmailAlreadyExistsException,
+)
 
 from ..utils import register_exception_handler
 
 EXCEPTION_STATUS_CODES = {
     UserWithEmailAlreadyExistsException: status.HTTP_409_CONFLICT,
-    UserNotFoundException: status.HTTP_404_NOT_FOUND,
+    UserByEmailNotFoundException: status.HTTP_404_NOT_FOUND,
+    UserByIdNotFoundException: status.HTTP_404_NOT_FOUND,
 }
 
 

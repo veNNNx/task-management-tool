@@ -25,3 +25,10 @@ class Steps:
 
     def get_by_id(self, id: UUID) -> Task:
         return self._task_facade.get_by_id(id)
+
+    def create_user(self, name: str = "user") -> UUID:
+        email = f"{name}@example.com"
+        user = self._task_facade._user_service.create(
+            email=email, name=name, password=name
+        )
+        return user.id

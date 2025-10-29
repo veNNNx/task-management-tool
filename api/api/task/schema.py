@@ -52,5 +52,6 @@ class TaskOut(TaskIn):
     id: UUID
     completed: bool
     project_id: None | UUID = Field(..., alias="projectId")
+    assigned_to: None | UUID = Field(..., alias="assignedTo")
     created_at: datetime = Field(..., alias="createdAt")
     updated_at: datetime = Field(..., alias="updatedAt")

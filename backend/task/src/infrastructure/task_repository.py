@@ -116,6 +116,34 @@ class TaskTable:
 
         return self._to_entity(task_model)
 
+    def assign_task_to_user(self, task_id: UUID, user_id: UUID) -> None:
+        with self._session() as db:
+            task_model = (
+                db.query(TaskModel).filter(TaskModel.id == str(task_id)).first()
+            )
+            if not task_model:
+                raise TaskNotFoundException(task_id)
+
+            task_model.assigned_to = str(user_id)
+            task_model.updated_at = datetime.now(timezone.utc)
+
+            db.commit()
+            db.refresh(task_model)
+
+    def unassign_task(self, task_id: UUID) -> None:
+        with self._session() as db:
+            task_model = (
+                db.query(TaskModel).filter(TaskModel.id == str(task_id)).first()
+            )
+            if not task_model:
+                raise TaskNotFoundException(task_id)
+
+            task_model.assigned_to = None
+            task_model.updated_at = datetime.now(timezone.utc)
+
+            db.commit()
+            db.refresh(task_model)
+
     def get_all(self) -> list[Task]:
         with self._session() as db:
             task_models = db.query(TaskModel).all()
@@ -167,6 +195,7 @@ class TaskTable:
             deadline=task.deadline,
             completed=task.completed,
             project_id=str(task.project_id) if task.project_id else None,
+            assigned_to=str(task.assigned_to) if task.assigned_to else None,
             created_at=task.created_at,
             updated_at=task.updated_at,
         )
@@ -180,6 +209,9 @@ class TaskTable:
             deadline=task_model.deadline.replace(tzinfo=timezone.utc),  # type: ignore[arg-type]
             completed=task_model.completed,  # type: ignore[arg-type]
             project_id=UUID(task_model.project_id) if task_model.project_id else None,  # type: ignore[arg-type]
+            assigned_to=UUID(task_model.assigned_to)  # type: ignore[arg-type]
+            if task_model.assigned_to
+            else None,
             created_at=task_model.created_at.replace(tzinfo=timezone.utc),  # type: ignore[arg-type]
             updated_at=task_model.updated_at.replace(tzinfo=timezone.utc),  # type: ignore[arg-type]
         )

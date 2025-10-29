@@ -159,6 +159,45 @@ def mark_as_uncompleted(
     return task_facade.change_task_state(id=id, completed=False)
 
 
+@router.patch(
+    "/{id}/assign/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Assign task to user.",
+    responses={
+        status.HTTP_404_NOT_FOUND: {"description": "Requested task does not exist."},
+    },
+)
+@inject
+def assign_to_user(
+    id: UUID,
+    user_id: UUID,
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
+    ],
+) -> None:
+    task_facade.assign_task_to_user(task_id=id, user_id=user_id)
+
+
+@router.patch(
+    "/{id}/unassign",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Unassign task from user.",
+    responses={
+        status.HTTP_404_NOT_FOUND: {"description": "Requested task does not exist."},
+    },
+)
+@inject
+def unassign(
+    id: UUID,
+    task_facade: Annotated[
+        TaskFacade,
+        Depends(Provide[ApplicationContainer.tasks.container.task_facade]),
+    ],
+) -> None:
+    task_facade.unassign_task(task_id=id)
+
+
 # DELETE
 @router.delete(
     "/{id}",
